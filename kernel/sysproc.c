@@ -107,3 +107,10 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// return the number of free pages in the system
+uint64
+sys_mfree(void)
+{
+  return count_free_mem();
+}
