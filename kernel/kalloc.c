@@ -27,6 +27,8 @@ void
 kinit()
 {
   initlock(&kmem.lock, "kmem");
+  if (kmem.freelist != 0)
+    panic("kinit: kmem.freelist is not empty");
   freerange(end, (void*)PHYSTOP);
 }
 
@@ -59,6 +61,7 @@ kfree(void *pa)
   acquire(&kmem.lock);
   r->next = kmem.freelist;
   kmem.freelist = r;
+  // printf("kfree: freed page at %p %p\n", kmem.freelist, &kmem);
   release(&kmem.lock);
 }
 

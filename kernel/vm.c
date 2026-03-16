@@ -47,7 +47,7 @@ kvmmake(void)
 
   // allocate and map a kernel stack for each process.
   proc_mapstacks(kpgtbl);
-  
+
   return kpgtbl;
 }
 
@@ -66,6 +66,7 @@ void
 kvminit(void)
 {
   kernel_pagetable = kvmmake();
+  // printf("kernel_pagetable: %p\n", kernel_pagetable);
 }
 
 // Switch the current CPU's h/w page table register to
@@ -156,7 +157,7 @@ mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm)
 
   if(size == 0)
     panic("mappages: size");
-  
+
   a = va;
   last = va + size - PGSIZE;
   for(;;){
@@ -200,7 +201,7 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
 
   for(a = va; a < va + npages*PGSIZE; a += PGSIZE){
     if((pte = walk(pagetable, a, 0)) == 0) // leaf page table entry allocated?
-      continue;   
+      continue;
     if((*pte & PTE_V) == 0)  // has physical page been allocated?
       continue;
     if(do_free){
@@ -329,7 +330,7 @@ void
 uvmclear(pagetable_t pagetable, uint64 va)
 {
   pte_t *pte;
-  
+
   pte = walk(pagetable, va, 0);
   if(pte == 0)
     panic("uvmclear");
@@ -349,7 +350,7 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
     va0 = PGROUNDDOWN(dstva);
     if(va0 >= MAXVA)
       return -1;
-  
+
     pa0 = walkaddr(pagetable, va0);
     if(pa0 == 0) {
       if((pa0 = vmfault(pagetable, va0, 0)) == 0) {
@@ -361,7 +362,7 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
     // forbid copyout over read-only user text pages.
     if((*pte & PTE_W) == 0)
       return -1;
-      
+
     n = PGSIZE - (dstva - va0);
     if(n > len)
       n = len;
