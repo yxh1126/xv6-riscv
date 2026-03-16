@@ -66,7 +66,7 @@ void
 kvminit(void)
 {
   kernel_pagetable = kvmmake();
-  // printf("kernel_pagetable: %p\n", kernel_pagetable);
+  printf("kernel_pagetable: %p\n", kernel_pagetable);
 }
 
 // Switch the current CPU's h/w page table register to
@@ -78,6 +78,8 @@ kvminithart()
   sfence_vma();
 
   w_satp(MAKE_SATP(kernel_pagetable));
+  printf("kvminithart: w_satp=%p\n", (void *)MAKE_SATP(kernel_pagetable));
+  printf("kvminithart: r_satp=%p\n", (void *)r_satp());
 
   // flush stale entries from the TLB.
   sfence_vma();
