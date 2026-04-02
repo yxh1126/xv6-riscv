@@ -27,7 +27,7 @@ class QEMU(object):
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT)
         self.output = ""
-        self.outbytes = bytearray()       
+        self.outbytes = bytearray()
         time.sleep(1)
 
     def reset_fs(self):
@@ -49,14 +49,14 @@ class QEMU(object):
             f.write(self.out)
             f.close()
       except OSError as e:
-        print("Provided a bad results path. Error:", e)     
-        
+        print("Provided a bad results path. Error:", e)
+
     def cmd(self, c):
         if isinstance(c, str):
             c = c.encode('utf-8')
         self.proc.stdin.write(c)
         self.proc.stdin.flush()
-        
+
     def crash(self):
         ps = run(['ps', '-opid', '--no-headers', '--ppid', str(self.proc.pid)], stdout=subprocess.PIPE, encoding='utf8')
         kids = [int(line) for line in ps.stdout.splitlines()]
@@ -168,7 +168,7 @@ def test_log():
         print("log attempt ", i+1)
     print("FAIL")
     sys.exit(1)
-    
+
 def test_forphan():
     print("Test recovery of an orphaned file")
     forphan()
@@ -202,8 +202,8 @@ def test_usertests(test=""):
 def main():
     print(args)
     rex = r'%s' % args.testrex
-    funcs = [(obj,name) for name,obj in inspect.getmembers(sys.modules[__name__]) 
-                     if (inspect.isfunction(obj) and 
+    funcs = [(obj,name) for name,obj in inspect.getmembers(sys.modules[__name__])
+                     if (inspect.isfunction(obj) and
                          name.startswith('test'))]
     none = True
     for (f,n) in funcs:

@@ -16,7 +16,7 @@ main(int argc, char **argv)
   char *s = argv[0];
   struct stat st;
   char *ff = "file0";
-  
+
   if ((fd = open(ff, O_CREATE|O_WRONLY)) < 0) {
     printf("%s: open failed\n", s);
     exit(1);
